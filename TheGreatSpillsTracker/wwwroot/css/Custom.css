@@ -1,0 +1,29 @@
+﻿.milestone-counter {
+    float: left;
+    margin: 25px;
+    text-align: center;
+}
+
+.stat {
+    margin: 10px auto;
+}
+
+.highlight {
+    color: #111;
+    padding: 20px 0;
+    font-weight: bold;
+    display: block;
+    overflow: hidden;
+    margin-bottom: 0;
+    font-size: 48px;
+}
+
+.stat i {
+    color: #3498db;
+}
+
+.milestone-details {
+    font-weight: bold;
+    font-size: 18px;
+    color: #999;
+}

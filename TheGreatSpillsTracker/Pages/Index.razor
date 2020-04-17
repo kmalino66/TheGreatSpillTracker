@@ -1,0 +1,50 @@
+﻿@page "/"
+@using TheGreatSpillsTracker.Data
+@inject IJSRuntime jrt
+@inject SpillDataService spillService
+
+<div class="jumbotron">
+    <div class="container">
+        <h1>The Great Spills Tracker</h1>
+        <p>A simple app to keep track of time since Trent last spilled.</p>
+    </div>
+</div>
+<body onresize="RebuildTimeCircles()">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header">
+                    <h3>Last Spill at Work</h3>
+                </div>
+                <div class="card-body">
+                    <div class="EnterpriseTime" data-date="@spillService.GetSpill().EnterpriseSpillString()"></div>
+                    <h3 class="badge badge-primary">Spill Count: @spillService.GetSpill().EnterpriseSpillCount</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header">
+                    <h3>Last Spill at Home</h3>
+                </div>
+                <div class="card-body">
+                    <div class="EnterpriseTime" data-date="@spillService.GetSpill().HomeSpillString()"></div>
+                    <h3 class="badge badge-primary">Spill Count: @spillService.GetSpill().HomeSpillCount</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+@code {
+
+    protected async override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await jrt.InvokeVoidAsync("InitTimeCircles");
+        }
+    }
+}
+
