@@ -46,5 +46,11 @@
             await jrt.InvokeVoidAsync("InitTimeCircles");
         }
     }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        spillService.Initialize();
+    }
 }
 

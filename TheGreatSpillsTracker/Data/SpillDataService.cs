@@ -13,7 +13,7 @@ namespace TheGreatSpillsTracker.Data
     {
         private SpillData spill = new SpillData();
 
-        public SpillDataService()
+        public void Initialize()
         {
             SpillData tmp = ReadInfo();
 
@@ -28,6 +28,7 @@ namespace TheGreatSpillsTracker.Data
                 spill.HomeSpill = DateTime.Now;
                 spill.HomeSpillCount = 0;
                 spill.SpillCount = 0;
+                spill.PassHash = "":
                 SaveInfo();
             }
         }
@@ -42,6 +43,7 @@ namespace TheGreatSpillsTracker.Data
             spill.HomeSpill = DateTime.Now;
             spill.HomeSpillCount++;
             spill.SpillCount++;
+            SaveInfo();
         }
 
         public void AddEnterpriseSpill()
@@ -49,6 +51,7 @@ namespace TheGreatSpillsTracker.Data
             spill.EnterpriseSpill = DateTime.Now;
             spill.EnterpriseSpillCount++;
             spill.SpillCount++;
+            SaveInfo();
         }
 
         public void SaveInfo()

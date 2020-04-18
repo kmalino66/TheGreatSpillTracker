@@ -1,5 +1,78 @@
-﻿<h3>Admin</h3>
+﻿@page "/admin"
+@using TheGreatSpillsTracker.Data
+@using System.Security.Cryptography
+@using System.Text
+@inject SpillDataService spillService
+
+<h2>Admin</h2>
+<br />
+<p>Enter password to make changes.</p>
+<div class="form-group">
+    <label for="passwordInput">Enter password to make changes</label>
+    <input type="password" class="form-text text-muted" id="passwordInput" aria-describedby="password" @bind="Password" />
+    <button type="button" class="btn btn-primary" @onclick="PasswordCheck">Submit</button>
+</div>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header">
+                <h3>Spills at Work</h3>
+            </div>
+            <div class="card-body">
+                <p>Last Spill: @spillService.GetSpill().EnterpriseSpillString()</p>
+                <p>Number of Spills: @spillService.GetSpill().EnterpriseSpillCount</p>
+                <button type="button" class="btn btn-primary" @onclick="NewSpillWork">Add Spill Now</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header">
+                <h3>Spills at Home</h3>
+            </div>
+            <div class="card-body">
+                <p>Last Spill: @spillService.GetSpill().HomeSpillString()</p>
+                <p>Number of Spills: @spillService.GetSpill().HomeSpillCount</p>
+                <button type="button" class="btn btn-primary" @onclick="NewSpillHome">Add Spill Now</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @code {
+    String Password = "";
+    bool authed = false;
 
+    public void NewSpillHome()
+    {
+        if(spillService.GetSpill().PassHash != hash(Password))
+        {
+            
+        }
+        spillService.AddHomeSpill();
+        this.StateHasChanged();
+    }
+
+    public void NewSpillWork()
+    {
+        spillService.AddEnterpriseSpill();
+        this.StateHasChanged();
+    }
+
+    public string hash(string str)
+    {
+        using (SHA1Managed sha1 = new SHA1Managed())
+        {
+            var hash = sha1.ComputeHash(Encoding.UTF8.GetBytes(str));
+            var sb = new StringBuilder(hash.Length * 2);
+
+            foreach ( byte b in hash)
+            {
+                sb.Append(b.ToString("X2"));
+            }
+            string hi = sb.ToString();
+            return sb.ToString();
+        }
+    }
 }
