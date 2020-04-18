@@ -10,7 +10,6 @@
 <div class="form-group">
     <label for="passwordInput">Enter password to make changes</label>
     <input type="password" class="form-text text-muted" id="passwordInput" aria-describedby="password" @bind="Password" />
-    <button type="button" class="btn btn-primary" @onclick="PasswordCheck">Submit</button>
 </div>
 
 <div class="row">
@@ -48,7 +47,7 @@
     {
         if(spillService.GetSpill().PassHash != hash(Password))
         {
-            
+            return;
         }
         spillService.AddHomeSpill();
         this.StateHasChanged();
@@ -56,6 +55,10 @@
 
     public void NewSpillWork()
     {
+        if(spillService.GetSpill().PassHash != hash(Password))
+        {
+            return;
+        }
         spillService.AddEnterpriseSpill();
         this.StateHasChanged();
     }

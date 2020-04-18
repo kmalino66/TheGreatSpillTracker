@@ -28,7 +28,7 @@ namespace TheGreatSpillsTracker.Data
                 spill.HomeSpill = DateTime.Now;
                 spill.HomeSpillCount = 0;
                 spill.SpillCount = 0;
-                spill.PassHash = "":
+                spill.PassHash = "";
                 SaveInfo();
             }
         }
