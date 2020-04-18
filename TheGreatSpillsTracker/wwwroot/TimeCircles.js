@@ -106,6 +106,11 @@
             b: parseInt(result[3], 16)
         } : null;
     }
+
+    function getUtcDate() {
+        var now = new Date();
+        return new Date(now.getTime() + now.getTimezoneOffset() * 60000);
+    }
     
     function isCanvasSupported() {
         var elem = document.createElement('canvas');
@@ -174,7 +179,7 @@
         if (!isNaN(d))
             return d;
         // Cant find anything
-        return new Date();
+        return getUtcDate();
     }
 
     function parse_times(diff, old_diff, total_duration, units, floor) {
@@ -254,7 +259,7 @@
             w.requestAnimationFrame = function(callback, element, instance) {
                 if (typeof instance === "undefined")
                     instance = {data: {last_frame: 0}};
-                var currTime = new Date().getTime();
+                var currTime = getUtcDate().getTime();
                 var timeToCall = Math.max(0, 16 - (currTime - instance.data.last_frame));
                 var id = w.setTimeout(function() {
                     callback(currTime + timeToCall);
@@ -441,7 +446,7 @@
         var diff, old_diff;
 
         var prevDate = this.data.prev_time;
-        var curDate = new Date();
+        var curDate = getUtcDate();
         this.data.prev_time = curDate;
 
         if (prevDate === null)
@@ -519,7 +524,7 @@
                     }
                 }
                 else {
-                    this.animateArc(x, y, color, visible_times.pct[key], visible_times.old_pct[key], (new Date()).getTime() + tick_duration);
+                    this.animateArc(x, y, color, visible_times.pct[key], visible_times.old_pct[key], (getUtcDate()).getTime() + tick_duration);
                 }
             }
             lastKey = key;
@@ -569,7 +574,7 @@
             }
         }
         else {
-            var progress = (tick_duration - (animation_end - (new Date()).getTime())) / tick_duration;
+            var progress = (tick_duration - (animation_end - (getUtcDate()).getTime())) / tick_duration;
             if (progress > 1)
                 progress = 1;
 
@@ -671,7 +676,7 @@
         if (this.data.paused && typeof this.data.timer === "number") {
             return this.data.timer;
         }
-        var now = new Date();
+        var now = getUtcDate();
         return ((this.data.attributes.ref_date - now) / 1000);
     };
 
@@ -690,7 +695,7 @@
         // Check if this is an unpause of a timer
         else if (typeof this.data.timer === "number") {
             if (this.data.paused) {
-                this.data.attributes.ref_date = (new Date()).getTime() + (this.data.timer * 1000);
+                this.data.attributes.ref_date = (getUtcDate()).getTime() + (this.data.timer * 1000);
             }
         }
         else {
@@ -704,7 +709,7 @@
             }
             if (typeof attr_data_timer === "number") {
                 this.data.timer = attr_data_timer;
-                this.data.attributes.ref_date = (new Date()).getTime() + (attr_data_timer * 1000);
+                this.data.attributes.ref_date = (getUtcDate()).getTime() + (attr_data_timer * 1000);
             }
             else {
                 // data-timer and data-date were both not set
@@ -745,7 +750,7 @@
 
     TC_Instance.prototype.setOptions = function(options) {
         if (this.config === null) {
-            this.default_options.ref_date = new Date();
+            this.default_options.ref_date = getUtcDate();
             this.config = $.extend(true, {}, this.default_options);
         }
         $.extend(true, this.config, options);
@@ -799,7 +804,7 @@
     };
 
     TC_Instance.prototype.default_options = {
-        ref_date: new Date(),
+        ref_date: getUtcDate(),
         start: true,
         animation: "smooth",
         count_past_zero: true,
