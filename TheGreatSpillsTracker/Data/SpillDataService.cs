@@ -54,6 +54,18 @@ namespace TheGreatSpillsTracker.Data
             SaveInfo();
         }
 
+        public void ResetHomeCount()
+        {
+            spill.HomeSpillCount = 0;
+            SaveInfo();
+        }
+
+        public void ResetEnterpriseCount()
+        {
+            spill.EnterpriseSpillCount = 0;
+            SaveInfo();
+        }
+
         public void SaveInfo()
         {
             string path = Path.Combine(Environment.CurrentDirectory, "SpillData.json");
