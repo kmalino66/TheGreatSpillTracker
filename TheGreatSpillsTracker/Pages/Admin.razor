@@ -19,7 +19,7 @@
                 <h3>Spills at Work</h3>
             </div>
             <div class="card-body">
-                <p>Last Spill: @spillService.GetSpill().EnterpriseSpillString()</p>
+                <p>Last Spill: @spillService.GetSpill().EnterpriseSpillStringNonUTC()</p>
                 <p>Number of Spills: @spillService.GetSpill().EnterpriseSpillCount</p>
                 <button type="button" class="btn btn-primary" @onclick="NewSpillWork">Add Spill Now</button>
             </div>
@@ -31,7 +31,7 @@
                 <h3>Spills at Home</h3>
             </div>
             <div class="card-body">
-                <p>Last Spill: @spillService.GetSpill().HomeSpillString()</p>
+                <p>Last Spill: @spillService.GetSpill().HomeSpillStringNonUTC()</p>
                 <p>Number of Spills: @spillService.GetSpill().HomeSpillCount</p>
                 <button type="button" class="btn btn-primary" @onclick="NewSpillHome">Add Spill Now</button>
             </div>

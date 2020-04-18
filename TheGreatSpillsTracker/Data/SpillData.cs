@@ -18,10 +18,20 @@ namespace TheGreatSpillsTracker.Data
 
         public string EnterpriseSpillString()
         {
+            return EnterpriseSpill.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss");
+        }
+
+        public string EnterpriseSpillStringNonUTC()
+        {
             return EnterpriseSpill.ToString("yyyy-MM-dd HH:mm:ss");
         }
 
         public String HomeSpillString()
+        {
+            return HomeSpill.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss");
+        }
+
+        public String HomeSpillStringNonUTC()
         {
             return HomeSpill.ToString("yyyy-MM-dd HH:mm:ss");
         }
