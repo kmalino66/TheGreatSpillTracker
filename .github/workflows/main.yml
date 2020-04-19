@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to Azure Web App
-        uses: azure/appservice-actions/webapp@master'
+        uses: azure/appservice-actions/webapp@master
         with:
           app-name: thegreatspill
           publish-profile: ${{ secrets.azureWebAppPublish }}
