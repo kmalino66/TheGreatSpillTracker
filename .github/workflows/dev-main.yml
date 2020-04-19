@@ -1,4 +1,4 @@
-name: Build code and deploy to Azure
+name: Build code and deploy to Azure - Develop
 on:
   push:
     branches: 
@@ -20,7 +20,7 @@ jobs:
         run: dotnet build --configuration Release
   deploy:
     needs: [build]
-    name: Deploy App
+    name: Deploy App - Develop
     runs-on: ubuntu-latest
     steps:
        - name: Deploy to Azure Web App - Dev

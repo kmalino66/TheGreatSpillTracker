@@ -24,6 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to Azure Web App
+        if: github.ref == 'refs/heads/master'
         uses: azure/webapps-deploy@v2
         with:
           app-name: thegreatspill
