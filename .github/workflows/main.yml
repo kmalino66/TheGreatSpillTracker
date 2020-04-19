@@ -24,7 +24,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to Azure Web App
+        if: github.ref == 'refs/heads/master'
         uses: azure/webapps-deploy@v2
         with:
           app-name: thegreatspill
           publish-profile: ${{ secrets.azureWebAppPublish }}
+      - name: Deploy to Azure Web App - Dev
+        if: github.ref == 'refs/heads/develop'
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: thegreatspill
+          publish-profile: ${{ secrets.azureWebAppPublishDev }}
