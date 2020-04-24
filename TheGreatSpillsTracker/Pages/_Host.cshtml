@@ -14,7 +14,9 @@
     <base href="~/" />
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script type="text/javascript" src="TimeCircles.js"></script>
-    <link href="css/TimeCircles.css" rel="stylesheet"/>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBBMB48-iekMA_p3RVY1I1XxQ81MjUozcY&v=3"></script>
+    <script src="_content/BlazorGoogleMaps/objectManager.js"></script>
+    <link href="css/TimeCircles.css" rel="stylesheet" />
     <link href="css/Custom.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />
     <link href="css/site.css" rel="stylesheet" />
@@ -40,11 +42,13 @@
         function InitTimeCircles() {
             $(".EnterpriseTime").TimeCircles();
             $(".HomeTime").TimeCircles();
+            $(".RecordTime").TimeCircles();
         }
 
         function RebuildTimeCircles() {
             $(".EnterpriseTime").TimeCircles().rebuild();
             $(".HomeTime").TimeCircles().rebuild();
+            $(".RecordTime").TimeCircles().rebuild();
         }
     </script>
 </body>

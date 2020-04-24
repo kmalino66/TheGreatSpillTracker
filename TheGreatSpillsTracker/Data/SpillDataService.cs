@@ -1,11 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Threading.Tasks;
 
 namespace TheGreatSpillsTracker.Data
 {
@@ -27,6 +22,7 @@ namespace TheGreatSpillsTracker.Data
                 spill.EnterpriseSpillCount = 0;
                 spill.HomeSpill = DateTime.Now;
                 spill.HomeSpillCount = 0;
+                spill.RecordSpill = DateTime.Now;
                 spill.SpillCount = 0;
                 spill.PassHash = "";
                 SaveInfo();
@@ -51,6 +47,24 @@ namespace TheGreatSpillsTracker.Data
             spill.EnterpriseSpill = DateTime.Now;
             spill.EnterpriseSpillCount++;
             spill.SpillCount++;
+            SaveInfo();
+        }
+
+        public void AddRecordSpill(string basisTime)
+        {
+            switch (basisTime)
+            {
+                case "home":
+                    spill.RecordSpill = spill.HomeSpill;
+                    break;
+                case "work":
+                    spill.RecordSpill = spill.EnterpriseSpill;
+                    break;
+                default:
+                    spill.RecordSpill = DateTime.Now;
+                    break;
+            }
+
             SaveInfo();
         }
 

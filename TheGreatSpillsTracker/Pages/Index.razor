@@ -1,7 +1,17 @@
 ﻿@page "/"
 @using TheGreatSpillsTracker.Data
+@using GoogleMapsComponents
+@using GoogleMapsComponents.Maps
 @inject IJSRuntime jrt
 @inject SpillDataService spillService
+
+@functions {
+    private GoogleMap map1;
+    private MapOptions mapOptions;
+     private Stack<Marker> markers = new Stack<Marker>();
+        private List<String> _events = new List<String>();
+
+}
 
 <div class="jumbotron">
     <div class="container">
@@ -34,6 +44,28 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header">
+                    <h3>Last Record Spill</h3>
+                </div>
+                <div class="card-body">
+                    <div class="RecordTime" data-date="@spillService.GetSpill().RecordSpillString()"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header">
+                    <h3>Location of Last Spill</h3>
+                </div>
+                <div class="card-body">
+                    <GoogleMap @ref="@map1" Id="map1" Options="@mapOptions"></GoogleMap>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 @code {
@@ -43,6 +75,7 @@
         if (firstRender)
         {
             await jrt.InvokeVoidAsync("InitTimeCircles");
+            
         }
     }
 
@@ -50,6 +83,61 @@
     {
         base.OnInitialized();
         spillService.Initialize();
+
+        mapOptions = new MapOptions()
+		{
+			Zoom = 13,
+            Center = new LatLngLiteral()
+            {
+                Lat = 13.505892,
+                Lng = 100.8162
+            },
+			MapTypeId = MapTypeId.Roadmap
+		};
+
+    }
+
+    private async Task AddMarker()
+    {
+        var marker = await Marker.CreateAsync(map1.JsRuntime, new MarkerOptions()
+        {
+            Position = await map1.InteropObject.GetCenter(),
+            Map = map1.InteropObject,
+            Label = $"Test {markers.Count()}",
+            
+        });
+
+        //await marker.SetMap(map1);
+
+        //var map = await marker.GetMap();
+
+        var icon = await marker.GetIcon();
+
+        Console.WriteLine($"Get icon result type is : {icon.Value.GetType()}");
+
+        icon.Switch(
+            s => Console.WriteLine(s),
+            i => Console.WriteLine(i.Url),
+            _ => { });
+
+        //if (map == map1.InteropObject)
+        //{
+        //    Console.WriteLine("Yess");
+        //}
+        //else
+        //{
+        //    Console.WriteLine("Nooo");
+        //}
+
+        markers.Push(marker);
+
+        await marker.AddListener<MouseEvent>("click", e =>
+        {
+            _events.Add("click");
+            StateHasChanged();
+
+            e.Stop();
+        });
     }
 }
 

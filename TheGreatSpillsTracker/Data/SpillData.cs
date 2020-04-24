@@ -8,8 +8,12 @@ namespace TheGreatSpillsTracker.Data
     [Serializable]
     public class SpillData
     {
+        private const string STRING_FORMAT = "yyyy-MM-dd HH:mm:ss";
+
         public DateTime EnterpriseSpill { get; set; }
         public DateTime HomeSpill { get; set; }
+
+        public DateTime RecordSpill { get; set; }
 
         public int SpillCount { get; set; }
         public int EnterpriseSpillCount { get; set; }
@@ -18,22 +22,32 @@ namespace TheGreatSpillsTracker.Data
 
         public string EnterpriseSpillString()
         {
-            return EnterpriseSpill.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss");
+            return EnterpriseSpill.ToUniversalTime().ToString(STRING_FORMAT);
         }
 
         public string EnterpriseSpillStringNonUTC()
         {
-            return EnterpriseSpill.ToString("yyyy-MM-dd HH:mm:ss");
+            return EnterpriseSpill.ToString(STRING_FORMAT);
         }
 
-        public String HomeSpillString()
+        public string HomeSpillString()
         {
-            return HomeSpill.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss");
+            return HomeSpill.ToUniversalTime().ToString(STRING_FORMAT);
         }
 
-        public String HomeSpillStringNonUTC()
+        public string HomeSpillStringNonUTC()
         {
-            return HomeSpill.ToString("yyyy-MM-dd HH:mm:ss");
+            return HomeSpill.ToString(STRING_FORMAT);
+        }
+
+        public string RecordSpillString()
+        {
+            return RecordSpill.ToUniversalTime().ToString(STRING_FORMAT);
+        }
+
+        public string RecordSpillStringNonUTC()
+        {
+            return RecordSpill.ToString(STRING_FORMAT);
         }
     }
 }
