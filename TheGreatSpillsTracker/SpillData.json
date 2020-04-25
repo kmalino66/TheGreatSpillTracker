@@ -1,9 +1,13 @@
 {
-  "EnterpriseSpill": "2020-04-24T23:15:57.1656794-05:00",
-  "HomeSpill": "2020-04-24T16:06:52.5577341-05:00",
-  "RecordSpill": "2020-04-24T16:06:52.5577341-05:00",
-  "SpillCount": 1,
+  "EnterpriseSpill": "2020-04-25T00:39:37.1299859-05:00",
+  "HomeSpill": "2020-04-25T00:39:37.1304445-05:00",
+  "RecordSpill": "2020-04-25T00:39:37.1308069-05:00",
+  "MaxTimeNoSpill": "00:00:00",
+  "SpillCount": 0,
   "EnterpriseSpillCount": 0,
   "HomeSpillCount": 0,
-  "PassHash": "A94A8FE5CCB19BA61C4C0873D391E987982FBBD3"
+  "PassHash": "A3F6E82F564602E0CAC8D1860B064A2E7D127A65",
+  "HomeItemLastSpilled": "",
+  "WorkItemLastSpilled": "",
+  "RecordSpillItem": ""
 }

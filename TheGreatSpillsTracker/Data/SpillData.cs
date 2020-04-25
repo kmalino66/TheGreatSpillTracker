@@ -14,11 +14,15 @@ namespace TheGreatSpillsTracker.Data
         public DateTime HomeSpill { get; set; }
 
         public DateTime RecordSpill { get; set; }
+        public TimeSpan MaxTimeNoSpill { get; set; }
 
         public int SpillCount { get; set; }
         public int EnterpriseSpillCount { get; set; }
         public int HomeSpillCount { get; set; }
         public string PassHash { get; set; }
+        public string HomeItemLastSpilled { get; set; }
+        public string WorkItemLastSpilled { get; set; }
+        public string RecordSpillItem { get; set; }
 
         public string EnterpriseSpillString()
         {
@@ -49,5 +53,31 @@ namespace TheGreatSpillsTracker.Data
         {
             return RecordSpill.ToString(STRING_FORMAT);
         }
+
+        public TimeSpan TimeSinceLastSpill(DateTime spillTime)
+        {
+            DateTime lastSpill;
+            if (EnterpriseSpill >= HomeSpill)
+            {
+                lastSpill = EnterpriseSpill;
+            }
+            else
+            {
+                lastSpill = HomeSpill;
+            }
+
+            return spillTime - lastSpill;
+        }
+
+        public void CheckSetNewRecord(DateTime spillTime)
+        {
+            TimeSpan timeSinceLastSpill = TimeSinceLastSpill(spillTime);
+
+            if (timeSinceLastSpill > MaxTimeNoSpill)
+            {
+                MaxTimeNoSpill = timeSinceLastSpill;
+            }
+        }
+
     }
 }

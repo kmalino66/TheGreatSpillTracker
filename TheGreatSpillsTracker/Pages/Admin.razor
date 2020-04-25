@@ -6,11 +6,15 @@
 
 <h2>Admin</h2>
 <br />
-<div class="form-group">
-    <label for="passwordInput">Enter password to make changes</label>
-    <input type="password" class="form-text text-muted mb-4" id="passwordInput" aria-describedby="password" @bind="Password" />
-    <button type="button" class="btn btn-primary" @onclick="VerifyAuthentication">Authenticate</button>
-</div>
+
+@if (!authed)
+{
+    <div class="form-group">
+        <label for="passwordInput">Enter password to make changes</label>
+        <input type="password" class="form-text text-muted mb-4" id="passwordInput" aria-describedby="password" @bind="Password" />
+        <button type="button" class="btn btn-primary" @onclick="VerifyAuthentication">Authenticate</button>
+    </div>
+}
 
 @if (authed)
 {
@@ -52,8 +56,7 @@
 
     public void VerifyAuthentication()
     {
-        Console.WriteLine(hash(Password));
-        if(spillService.GetSpill().PassHash == hash(Password))
+        if (spillService.GetSpill().PassHash == hash(Password))
         {
             authed = true;
             this.StateHasChanged();
@@ -118,7 +121,7 @@
 
     public void SetHomeNewRecord()
     {
-        if(!authed)
+        if (!authed)
         {
             return;
         }
@@ -127,7 +130,7 @@
 
     public void SetWorkNewRecord()
     {
-        if(!authed)
+        if (!authed)
         {
             return;
         }

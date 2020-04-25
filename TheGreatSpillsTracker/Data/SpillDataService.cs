@@ -25,6 +25,9 @@ namespace TheGreatSpillsTracker.Data
                 spill.RecordSpill = DateTime.Now;
                 spill.SpillCount = 0;
                 spill.PassHash = "";
+                spill.HomeItemLastSpilled = "";
+                spill.WorkItemLastSpilled = "";
+                spill.RecordSpillItem = "";
                 SaveInfo();
             }
         }
@@ -39,6 +42,7 @@ namespace TheGreatSpillsTracker.Data
             spill.HomeSpill = DateTime.Now;
             spill.HomeSpillCount++;
             spill.SpillCount++;
+            spill.CheckSetNewRecord(DateTime.Now);
             SaveInfo();
         }
 
@@ -47,6 +51,7 @@ namespace TheGreatSpillsTracker.Data
             spill.EnterpriseSpill = DateTime.Now;
             spill.EnterpriseSpillCount++;
             spill.SpillCount++;
+            spill.CheckSetNewRecord(DateTime.Now);
             SaveInfo();
         }
 
