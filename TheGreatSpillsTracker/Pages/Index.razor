@@ -1,22 +1,17 @@
 ﻿@page "/"
 @using TheGreatSpillsTracker.Data
-@using GoogleMapsComponents
-@using GoogleMapsComponents.Maps
 @inject IJSRuntime jrt
 @inject SpillDataService spillService
 
 @functions {
-    private GoogleMap map1;
-    private MapOptions mapOptions;
-     private Stack<Marker> markers = new Stack<Marker>();
         private List<String> _events = new List<String>();
 
 }
 
 <div class="jumbotron">
     <div class="container">
-        <h1>The Great Spills Tracker</h1>
-        <p>A simple app to keep track of time since Trent last spilled.</p>
+        <h1 class="display-4">The Great Spills Tracker</h1>
+        <p class="lead">A simple app to keep track of time since Trent last spilled.</p>
     </div>
 </div>
 <body onresize="RebuildTimeCircles()">
@@ -95,60 +90,7 @@
         base.OnInitialized();
         spillService.Initialize();
 
-        mapOptions = new MapOptions()
-		{
-			Zoom = 13,
-            Center = new LatLngLiteral()
-            {
-                Lat = 13.505892,
-                Lng = 100.8162
-            },
-			MapTypeId = MapTypeId.Roadmap
-		};
-
     }
 
-    private async Task AddMarker()
-    {
-        var marker = await Marker.CreateAsync(map1.JsRuntime, new MarkerOptions()
-        {
-            Position = await map1.InteropObject.GetCenter(),
-            Map = map1.InteropObject,
-            Label = $"Test {markers.Count()}",
-            
-        });
-
-        //await marker.SetMap(map1);
-
-        //var map = await marker.GetMap();
-
-        var icon = await marker.GetIcon();
-
-        Console.WriteLine($"Get icon result type is : {icon.Value.GetType()}");
-
-        icon.Switch(
-            s => Console.WriteLine(s),
-            i => Console.WriteLine(i.Url),
-            _ => { });
-
-        //if (map == map1.InteropObject)
-        //{
-        //    Console.WriteLine("Yess");
-        //}
-        //else
-        //{
-        //    Console.WriteLine("Nooo");
-        //}
-
-        markers.Push(marker);
-
-        await marker.AddListener<MouseEvent>("click", e =>
-        {
-            _events.Add("click");
-            StateHasChanged();
-
-            e.Stop();
-        });
-    }
 }
 
