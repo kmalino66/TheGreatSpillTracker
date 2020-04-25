@@ -22,12 +22,15 @@ namespace TheGreatSpillsTracker.Data
                 spill.EnterpriseSpillCount = 0;
                 spill.HomeSpill = DateTime.Now;
                 spill.HomeSpillCount = 0;
-                spill.RecordSpill = DateTime.Now;
+                spill.BigSpill = DateTime.Now;
+                spill.BigSpillCount = 0;
                 spill.SpillCount = 0;
                 spill.PassHash = "";
                 spill.HomeItemLastSpilled = "";
                 spill.WorkItemLastSpilled = "";
                 spill.RecordSpillItem = "";
+                spill.HomeBigSpill = false;
+                spill.WorkBigSpill = false;
                 SaveInfo();
             }
         }
@@ -43,6 +46,7 @@ namespace TheGreatSpillsTracker.Data
             spill.HomeSpill = DateTime.Now;
             spill.HomeSpillCount++;
             spill.SpillCount++;
+            spill.HomeBigSpill = false;
             SaveInfo();
         }
 
@@ -52,6 +56,7 @@ namespace TheGreatSpillsTracker.Data
             spill.EnterpriseSpill = DateTime.Now;
             spill.EnterpriseSpillCount++;
             spill.SpillCount++;
+            spill.WorkBigSpill = false;
             SaveInfo();
         }
 
@@ -60,15 +65,23 @@ namespace TheGreatSpillsTracker.Data
             switch (basisTime)
             {
                 case "home":
-                    spill.RecordSpill = spill.HomeSpill;
+                    spill.BigSpill = spill.HomeSpill;
+                    spill.HomeBigSpill = true;
+                    spill.WorkBigSpill = false;
                     break;
                 case "work":
-                    spill.RecordSpill = spill.EnterpriseSpill;
+                    spill.BigSpill = spill.EnterpriseSpill;
+                    spill.WorkBigSpill = true;
+                    spill.HomeBigSpill = false;
                     break;
                 default:
-                    spill.RecordSpill = DateTime.Now;
+                    spill.BigSpill = DateTime.Now;
+                    spill.WorkBigSpill = false;
+                    spill.HomeBigSpill = false;
                     break;
             }
+
+            spill.BigSpillCount++;
 
             SaveInfo();
         }

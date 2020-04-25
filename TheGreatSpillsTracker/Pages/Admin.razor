@@ -30,7 +30,7 @@
                     <p>Number of Spills: @spillService.GetSpill().EnterpriseSpillCount</p>
                     <button type="button" class="btn btn-primary" @onclick="NewSpillWork">Add Spill Now</button>
                     <button type="button" class="btn btn-primary" @onclick="resetWorkCount">Reset Spill Count</button>
-                    <button type="button" class="btn btn-primary" @onclick="SetWorkNewRecord">Set as Record Spill</button>
+                    <button type="button" class="btn btn-primary" @onclick="SetWorkBigSpill">Mark as Big Spill</button>
                 </div>
             </div>
         </div>
@@ -44,7 +44,7 @@
                     <p>Number of Spills: @spillService.GetSpill().HomeSpillCount</p>
                     <button type="button" class="btn btn-primary" @onclick="NewSpillHome">Add Spill Now</button>
                     <button type="button" class="btn btn-primary" @onclick="resetHomeCounter">Reset Spill Count</button>
-                    <button type="button" class="btn btn-primary" @onclick="SetHomeNewRecord">Set as Record Spill</button>
+                    <button type="button" class="btn btn-primary" @onclick="SetHomeBigSpill">Mark as Big Spill</button>
                 </div>
             </div>
         </div>
@@ -132,7 +132,7 @@
         this.StateHasChanged();
     }
 
-    public void SetHomeNewRecord()
+    public void SetHomeBigSpill()
     {
         if (!authed)
         {
@@ -141,7 +141,7 @@
         spillService.AddRecordSpill("home");
     }
 
-    public void SetWorkNewRecord()
+    public void SetWorkBigSpill()
     {
         if (!authed)
         {

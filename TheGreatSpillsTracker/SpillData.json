@@ -1,13 +1,16 @@
 {
   "EnterpriseSpill": "2020-04-18T05:44:21.1299859-05:00",
   "HomeSpill": "2020-04-18T05:44:21.1299859-05:00",
-  "RecordSpill": "2018-08-28T00:00:00.1308069-05:00",
+  "BigSpill": "2018-08-28T00:00:00.1308069-05:00",
   "MaxTimeNoSpill": "00:00:00",
   "SpillCount": 0,
   "EnterpriseSpillCount": 0,
   "HomeSpillCount": 0,
+  "BigSpillCount": 0,
   "PassHash": "A3F6E82F564602E0CAC8D1860B064A2E7D127A65",
   "HomeItemLastSpilled": "",
   "WorkItemLastSpilled": "",
-  "RecordSpillItem": "MFD Printer o_O"
+  "RecordSpillItem": "",
+  "HomeBigSpill": false,
+  "WorkBigSpill": false
 }
