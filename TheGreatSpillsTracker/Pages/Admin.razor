@@ -6,48 +6,63 @@
 
 <h2>Admin</h2>
 <br />
-<p>Enter password to make changes. =D</p>
 <div class="form-group">
     <label for="passwordInput">Enter password to make changes</label>
-    <input type="password" class="form-text text-muted" id="passwordInput" aria-describedby="password" @bind="Password" />
+    <input type="password" class="form-text text-muted mb-4" id="passwordInput" aria-describedby="password" @bind="Password" />
+    <button type="button" class="btn btn-primary" @onclick="VerifyAuthentication">Authenticate</button>
 </div>
 
-<div class="row">
-    <div class="col-lg-6">
-        <div class="card shadow-sm mb-4">
-            <div class="card-header">
-                <h3>Spills at Work</h3>
+@if (authed)
+{
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header">
+                    <h3>Spills at Work</h3>
+                </div>
+                <div class="card-body">
+                    <p>Last Spill: @spillService.GetSpill().EnterpriseSpillStringNonUTC()</p>
+                    <p>Number of Spills: @spillService.GetSpill().EnterpriseSpillCount</p>
+                    <button type="button" class="btn btn-primary" @onclick="NewSpillWork">Add Spill Now</button>
+                    <button type="button" class="btn btn-primary" @onclick="resetWorkCount">Reset Spill Count</button>
+                    <button type="button" class="btn btn-primary" @onclick="SetHomeNewRecord">Set as Record Spill</button>
+                </div>
             </div>
-            <div class="card-body">
-                <p>Last Spill: @spillService.GetSpill().EnterpriseSpillStringNonUTC()</p>
-                <p>Number of Spills: @spillService.GetSpill().EnterpriseSpillCount</p>
-                <button type="button" class="btn btn-primary" @onclick="NewSpillWork">Add Spill Now</button>
-                <button type="button" class="btn btn-primary" @onclick="resetWorkCount">Reset Spill Count</button>
+        </div>
+        <div class="col-lg-6">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header">
+                    <h3>Spills at Home</h3>
+                </div>
+                <div class="card-body">
+                    <p>Last Spill: @spillService.GetSpill().HomeSpillStringNonUTC()</p>
+                    <p>Number of Spills: @spillService.GetSpill().HomeSpillCount</p>
+                    <button type="button" class="btn btn-primary" @onclick="NewSpillHome">Add Spill Now</button>
+                    <button type="button" class="btn btn-primary" @onclick="resetHomeCounter">Reset Spill Count</button>
+                    <button type="button" class="btn btn-primary" @onclick="SetWorkNewRecord">Set as Record Spill</button>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-lg-6">
-        <div class="card shadow-sm mb-4">
-            <div class="card-header">
-                <h3>Spills at Home</h3>
-            </div>
-            <div class="card-body">
-                <p>Last Spill: @spillService.GetSpill().HomeSpillStringNonUTC()</p>
-                <p>Number of Spills: @spillService.GetSpill().HomeSpillCount</p>
-                <button type="button" class="btn btn-primary" @onclick="NewSpillHome">Add Spill Now</button>
-                <button type="button" class="btn btn-primary" @onclick="resetHomeCounter">Reset Spill Count</button>
-            </div>
-        </div>
-    </div>
-</div>
+}
 
 @code {
     String Password = "";
     bool authed = false;
 
+    public void VerifyAuthentication()
+    {
+        Console.WriteLine(hash(Password));
+        if(spillService.GetSpill().PassHash == hash(Password))
+        {
+            authed = true;
+            this.StateHasChanged();
+        }
+    }
+
     public void NewSpillHome()
     {
-        if(spillService.GetSpill().PassHash != hash(Password))
+        if (!authed)
         {
             return;
         }
@@ -57,7 +72,7 @@
 
     public void NewSpillWork()
     {
-        if(spillService.GetSpill().PassHash != hash(Password))
+        if (!authed)
         {
             return;
         }
@@ -72,7 +87,7 @@
             var hash = sha1.ComputeHash(Encoding.UTF8.GetBytes(str));
             var sb = new StringBuilder(hash.Length * 2);
 
-            foreach ( byte b in hash)
+            foreach (byte b in hash)
             {
                 sb.Append(b.ToString("X2"));
             }
@@ -83,7 +98,7 @@
 
     public void resetHomeCounter()
     {
-        if(spillService.GetSpill().PassHash != hash(Password))
+        if (!authed)
         {
             return;
         }
@@ -93,11 +108,29 @@
 
     public void resetWorkCount()
     {
-        if(spillService.GetSpill().PassHash != hash(Password))
+        if (!authed)
         {
             return;
         }
         spillService.ResetEnterpriseCount();
         this.StateHasChanged();
+    }
+
+    public void SetHomeNewRecord()
+    {
+        if(!authed)
+        {
+            return;
+        }
+        spillService.AddRecordSpill("home");
+    }
+
+    public void SetWorkNewRecord()
+    {
+        if(!authed)
+        {
+            return;
+        }
+        spillService.AddRecordSpill("work");
     }
 }
