@@ -39,19 +39,19 @@ namespace TheGreatSpillsTracker.Data
 
         public void AddHomeSpill()
         {
+            spill.CheckSetNewRecord(DateTime.Now);
             spill.HomeSpill = DateTime.Now;
             spill.HomeSpillCount++;
             spill.SpillCount++;
-            spill.CheckSetNewRecord(DateTime.Now);
             SaveInfo();
         }
 
         public void AddEnterpriseSpill()
         {
+            spill.CheckSetNewRecord(DateTime.Now);
             spill.EnterpriseSpill = DateTime.Now;
             spill.EnterpriseSpillCount++;
             spill.SpillCount++;
-            spill.CheckSetNewRecord(DateTime.Now);
             SaveInfo();
         }
 
@@ -106,6 +106,18 @@ namespace TheGreatSpillsTracker.Data
 
             string json = System.IO.File.ReadAllText(path);
             return JsonConvert.DeserializeObject<SpillData>(json);
+        }
+
+        public string ReadInfoRaw()
+        {
+            string path = Path.Combine(Environment.CurrentDirectory, "SpillData.json");
+
+            if (!System.IO.File.Exists(path))
+            {
+                return null;
+            }
+
+            return System.IO.File.ReadAllText(path);
         }
     }
 }

@@ -3,6 +3,7 @@
 @using System.Security.Cryptography
 @using System.Text
 @inject SpillDataService spillService
+@inject IJSRuntime  JSRuntime
 
 <h2>Admin</h2>
 <br />
@@ -48,11 +49,23 @@
             </div>
         </div>
     </div>
+
+    <br />
+    <button type="button" class="btn btn-primary" @onclick="DownloadSettings">Download Settings JSON</button>
 }
 
 @code {
     String Password = "";
     bool authed = false;
+
+    public async void DownloadSettings()
+    {
+        await JSRuntime.InvokeAsync<object>(
+        "FileSaveAs",
+        "SpillData.json",
+        spillService.ReadInfoRaw()
+        );
+    }
 
     public void VerifyAuthentication()
     {

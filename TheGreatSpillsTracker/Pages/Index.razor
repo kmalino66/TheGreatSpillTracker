@@ -58,10 +58,21 @@
         <div class="col-lg-6">
             <div class="card shadow-sm mb-4">
                 <div class="card-header">
-                    <h3>Location of Last Spill</h3>
+                    <h3>Spill Statistics</h3>
                 </div>
                 <div class="card-body">
-                    <GoogleMap @ref="@map1" Id="map1" Options="@mapOptions"></GoogleMap>
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th scope="row">Record Time With No Spills</th>
+                                <td>@spillService.GetSpill().MaxTimeNoSpill.ToString()</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Total Spill Count</th>
+                                <td>@spillService.GetSpill().SpillCount</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
