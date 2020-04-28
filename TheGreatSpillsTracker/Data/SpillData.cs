@@ -15,6 +15,7 @@ namespace TheGreatSpillsTracker.Data
 
         public DateTime BigSpill { get; set; }
         public TimeSpan MaxTimeNoSpill { get; set; }
+        public TimeSpan MinTimeNoSpill { get; set; }
 
         public int SpillCount { get; set; }
         public int EnterpriseSpillCount { get; set; }
@@ -79,6 +80,16 @@ namespace TheGreatSpillsTracker.Data
             if (timeSinceLastSpill > MaxTimeNoSpill)
             {
                 MaxTimeNoSpill = timeSinceLastSpill;
+            }
+        }
+
+        public void CheckSetNewMinRecord(DateTime spillTime)
+        {
+            TimeSpan timeSinceLastSpill = TimeSinceLastSpill(spillTime);
+
+            if (timeSinceLastSpill < MinTimeNoSpill)
+            {
+                MinTimeNoSpill = timeSinceLastSpill;
             }
         }
 

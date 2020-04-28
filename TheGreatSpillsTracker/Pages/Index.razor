@@ -68,7 +68,11 @@
                         <tbody>
                             <tr>
                                 <th scope="row">Record Time With No Spills</th>
-                                <td>@spillService.GetSpill().MaxTimeNoSpill.ToString()</td>
+                                <td>@ReadableTime.GetReadableTimespan(spillService.GetSpill().MaxTimeNoSpill)</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Shortest Time With No Spills</th>
+                                <td>@ReadableTime.GetReadableTimespan(spillService.GetSpill().MinTimeNoSpill)</td>
                             </tr>
                             <tr>
                                 <th scope="row">Total Spill Count</th>

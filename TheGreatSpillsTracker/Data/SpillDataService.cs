@@ -43,6 +43,7 @@ namespace TheGreatSpillsTracker.Data
         public void AddHomeSpill()
         {
             spill.CheckSetNewRecord(DateTime.Now);
+            spill.CheckSetNewMinRecord(DateTime.Now);
             spill.HomeSpill = DateTime.Now;
             spill.HomeSpillCount++;
             spill.SpillCount++;
@@ -53,6 +54,7 @@ namespace TheGreatSpillsTracker.Data
         public void AddEnterpriseSpill()
         {
             spill.CheckSetNewRecord(DateTime.Now);
+            spill.CheckSetNewMinRecord(DateTime.Now);
             spill.EnterpriseSpill = DateTime.Now;
             spill.EnterpriseSpillCount++;
             spill.SpillCount++;
