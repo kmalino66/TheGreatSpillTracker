@@ -5,7 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="ChangeLog.md" />
+    <Content Include="ChangeLog.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
