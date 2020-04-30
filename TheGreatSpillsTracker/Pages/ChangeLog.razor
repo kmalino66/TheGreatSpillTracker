@@ -1,0 +1,9 @@
+﻿@page "/ChangeLog"
+@using Markdig
+@using System.IO
+
+<div>@((MarkupString) mark)</div>
+
+@code {
+    public String mark => Markdown.ToHtml(File.ReadAllText("ChangeLog.md"));
+}
