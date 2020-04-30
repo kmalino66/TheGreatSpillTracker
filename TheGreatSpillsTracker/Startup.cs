@@ -29,6 +29,7 @@ namespace TheGreatSpillsTracker
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<SpillDataService>();
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -54,6 +55,7 @@ namespace TheGreatSpillsTracker
             {
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
+                endpoints.MapHub<UpdateHub>("/uHub");
             });
         }
     }

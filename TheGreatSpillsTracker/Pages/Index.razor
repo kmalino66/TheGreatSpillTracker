@@ -1,6 +1,8 @@
 ﻿@page "/"
 @using TheGreatSpillsTracker.Data
+@using Microsoft.AspNetCore.SignalR.Client
 @inject IJSRuntime jrt
+@inject NavigationManager NavigationManager
 @inject SpillDataService spillService
 
 <div class="jumbotron">
@@ -88,20 +90,29 @@
 
 @code {
 
+     HubConnection hubConnection;
+
     protected async override void OnAfterRender(bool firstRender)
     {
         if (firstRender)
         {
             await jrt.InvokeVoidAsync("InitTimeCircles");
-            
         }
     }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        base.OnInitialized();
         spillService.Initialize();
+        hubConnection = new HubConnectionBuilder()
+            .WithUrl(NavigationManager.ToAbsoluteUri("/uHub"))
+            .Build();
 
+        hubConnection.On("broadcastMessage", () =>
+        {
+            jrt.InvokeVoidAsync("ReloadPage");
+        });
+
+        await hubConnection.StartAsync();
     }
 
 }

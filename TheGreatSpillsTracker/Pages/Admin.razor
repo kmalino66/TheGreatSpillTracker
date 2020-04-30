@@ -2,7 +2,10 @@
 @using TheGreatSpillsTracker.Data
 @using System.Security.Cryptography
 @using System.Text
+@using Microsoft.AspNetCore.SignalR.Client
+
 @inject SpillDataService spillService
+@inject NavigationManager NavigationManager
 @inject IJSRuntime  JSRuntime
 
 <h2>Admin</h2>
@@ -58,6 +61,20 @@
     String Password = "";
     bool authed = false;
 
+    HubConnection hubConnection;
+
+    protected override async Task OnInitializedAsync()
+    {
+        hubConnection = new HubConnectionBuilder()
+            .WithUrl(NavigationManager.ToAbsoluteUri("/uHub"))
+            .Build();
+
+        await hubConnection.StartAsync();
+    }
+
+    Task SendUpdate() =>
+        hubConnection.SendAsync("SendBroadcast");
+
     public async void DownloadSettings()
     {
         await JSRuntime.InvokeAsync<object>(
@@ -83,7 +100,7 @@
             return;
         }
         spillService.AddHomeSpill();
-        this.StateHasChanged();
+        PageUpdate();
     }
 
     public void NewSpillWork()
@@ -93,7 +110,7 @@
             return;
         }
         spillService.AddEnterpriseSpill();
-        this.StateHasChanged();
+        PageUpdate();
     }
 
     public string hash(string str)
@@ -119,7 +136,7 @@
             return;
         }
         spillService.ResetHomeCount();
-        this.StateHasChanged();
+        PageUpdate();
     }
 
     public void resetWorkCount()
@@ -129,7 +146,7 @@
             return;
         }
         spillService.ResetEnterpriseCount();
-        this.StateHasChanged();
+        PageUpdate();
     }
 
     public void SetHomeBigSpill()
@@ -139,6 +156,7 @@
             return;
         }
         spillService.AddRecordSpill("home");
+        PageUpdate();
     }
 
     public void SetWorkBigSpill()
@@ -148,5 +166,12 @@
             return;
         }
         spillService.AddRecordSpill("work");
+        PageUpdate();
+    }
+
+    public void PageUpdate()
+    {
+        SendUpdate();
+        this.StateHasChanged();
     }
 }
