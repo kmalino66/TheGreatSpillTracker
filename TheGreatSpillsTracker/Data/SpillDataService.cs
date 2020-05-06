@@ -40,22 +40,22 @@ namespace TheGreatSpillsTracker.Data
             return spill;
         }
 
-        public void AddHomeSpill()
+        public void AddHomeSpill(DateTime spillTime)
         {
-            spill.CheckSetNewRecord(DateTime.Now);
-            spill.CheckSetNewMinRecord(DateTime.Now);
-            spill.HomeSpill = DateTime.Now;
+            spill.CheckSetNewRecord(spillTime);
+            spill.CheckSetNewMinRecord(spillTime);
+            spill.HomeSpill = spillTime;
             spill.HomeSpillCount++;
             spill.SpillCount++;
             spill.HomeBigSpill = false;
             SaveInfo();
         }
 
-        public void AddEnterpriseSpill()
+        public void AddEnterpriseSpill(DateTime spillTime)
         {
-            spill.CheckSetNewRecord(DateTime.Now);
-            spill.CheckSetNewMinRecord(DateTime.Now);
-            spill.EnterpriseSpill = DateTime.Now;
+            spill.CheckSetNewRecord(spillTime);
+            spill.CheckSetNewMinRecord(spillTime);
+            spill.EnterpriseSpill = spillTime;
             spill.EnterpriseSpillCount++;
             spill.SpillCount++;
             spill.WorkBigSpill = false;

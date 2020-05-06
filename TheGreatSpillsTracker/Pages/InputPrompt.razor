@@ -1,0 +1,33 @@
+﻿@inject IModalService Modal
+@inject IJSRuntime  JSRuntime
+
+
+<h3>Additional Information</h3>
+
+<div class="form-group">
+    <label for="formSpilldate">Date of Spill</label>
+    <input type="date" class="form-control" id="formSpillDate" @bind="date" />
+</div>
+
+<div class="form-group">
+    <label for="formSpillTime">Time of Spill</label>
+    <input type="time" class="form-control" id="formSpillTime" @bind="time" />
+</div>
+
+<button @onclick="SubmitChoice" class="btn btn-primary">Submit</button>
+
+@code {
+
+    [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; }
+
+    DateTime date;
+    DateTime time;
+
+    async void SubmitChoice()
+    {
+        int offset = await JSRuntime.InvokeAsync<int>("getTimeOffset");
+        DateTime dt = new DateTime(date.Year, date.Month, date.Day, time.Hour, time.Minute, time.Second, DateTimeKind.Utc);
+        dt = dt.AddMinutes(-offset);
+        BlazoredModal.Close(ModalResult.Ok<DateTime>(dt));
+    }
+}

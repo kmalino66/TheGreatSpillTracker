@@ -7,9 +7,12 @@
 @inject SpillDataService spillService
 @inject NavigationManager NavigationManager
 @inject IJSRuntime  JSRuntime
+@inject IModalService Modal
 
 <h2>Admin</h2>
 <br />
+
+<button @onclick="@(() => Modal.Show<InputPrompt>("Modal Popup Example"))" class="btn btn-primary">View </button>
 
 @if (!authed)
 {
@@ -31,7 +34,7 @@
                 <div class="card-body">
                     <p>Last Spill: @spillService.GetSpill().EnterpriseSpillStringNonUTC()</p>
                     <p>Number of Spills: @spillService.GetSpill().EnterpriseSpillCount</p>
-                    <button type="button" class="btn btn-primary" @onclick="NewSpillWork">Add Spill Now</button>
+                    <button type="button" class="btn btn-primary" @onclick="NewSpillWorkNow">Add Spill Now</button>
                     <button type="button" class="btn btn-primary" @onclick="resetWorkCount">Reset Spill Count</button>
                     <button type="button" class="btn btn-primary" @onclick="SetWorkBigSpill">Mark as Big Spill</button>
                 </div>
@@ -45,7 +48,7 @@
                 <div class="card-body">
                     <p>Last Spill: @spillService.GetSpill().HomeSpillStringNonUTC()</p>
                     <p>Number of Spills: @spillService.GetSpill().HomeSpillCount</p>
-                    <button type="button" class="btn btn-primary" @onclick="NewSpillHome">Add Spill Now</button>
+                    <button type="button" class="btn btn-primary" @onclick="NewSpillHomeNow">Add Spill Now</button>
                     <button type="button" class="btn btn-primary" @onclick="resetHomeCounter">Reset Spill Count</button>
                     <button type="button" class="btn btn-primary" @onclick="SetHomeBigSpill">Mark as Big Spill</button>
                 </div>
@@ -93,23 +96,23 @@
         }
     }
 
-    public void NewSpillHome()
+    public void NewSpillHomeNow()
     {
         if (!authed)
         {
             return;
         }
-        spillService.AddHomeSpill();
+        spillService.AddHomeSpill(DateTime.Now);
         PageUpdate();
     }
 
-    public void NewSpillWork()
+    public void NewSpillWorkNow()
     {
         if (!authed)
         {
             return;
         }
-        spillService.AddEnterpriseSpill();
+        spillService.AddEnterpriseSpill(DateTime.Now);
         PageUpdate();
     }
 
