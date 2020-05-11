@@ -47,7 +47,7 @@
                 <div class="card-body">
                     <div class="HomeTime" data-date="@spillService.GetSpill().HomeSpillString()"></div>
                     <h3 class="badge badge-primary">Spill Count: @spillService.GetSpill().HomeSpillCount</h3>
-                    @if (!string.IsNullOrWhiteSpace(spillService.GetSpill().WorkSpillDescription))
+                    @if (!string.IsNullOrWhiteSpace(spillService.GetSpill().HomeSpillDescription))
                     {
                         <h3 class="badge badge-primary">Spill Description: @spillService.GetSpill().HomeSpillDescription</h3>
                     }
@@ -64,8 +64,7 @@
                 <div class="card-body">
                     <div class="RecordTime" data-date="@spillService.GetSpill().BigSpillString()"></div>
                     <h3 class="badge badge-primary">Spill Count: @spillService.GetSpill().BigSpillCount</h3>
-
-h                </div>
+                </div>
             </div>
         </div>
         <div class="col-lg-6">
