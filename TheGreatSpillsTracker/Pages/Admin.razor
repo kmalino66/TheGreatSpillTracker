@@ -12,8 +12,6 @@
 <h2>Admin</h2>
 <br />
 
-<button @onclick="@(() => Modal.Show<InputPrompt>("Modal Popup Example"))" class="btn btn-primary">View </button>
-
 @if (!authed)
 {
     <div class="form-group">
@@ -32,9 +30,9 @@
                     <h3>Spills at Work</h3>
                 </div>
                 <div class="card-body">
-                    <p>Last Spill: @spillService.GetSpill().EnterpriseSpillStringNonUTC()</p>
-                    <p>Number of Spills: @spillService.GetSpill().EnterpriseSpillCount</p>
-                    <button type="button" class="btn btn-primary" @onclick="NewSpillWorkNow">Add Spill Now</button>
+                    <p>Last Spill: @spillService.GetSpill().WorkSpillStringNonUTC()</p>
+                    <p>Number of Spills: @spillService.GetSpill().WorkSpillCount</p>
+                    <button type="button" class="btn btn-primary" @onclick="NewSpillWorkNow">Add Spill</button>
                     <button type="button" class="btn btn-primary" @onclick="resetWorkCount">Reset Spill Count</button>
                     <button type="button" class="btn btn-primary" @onclick="SetWorkBigSpill">Mark as Big Spill</button>
                 </div>
@@ -48,7 +46,7 @@
                 <div class="card-body">
                     <p>Last Spill: @spillService.GetSpill().HomeSpillStringNonUTC()</p>
                     <p>Number of Spills: @spillService.GetSpill().HomeSpillCount</p>
-                    <button type="button" class="btn btn-primary" @onclick="NewSpillHomeNow">Add Spill Now</button>
+                    <button type="button" class="btn btn-primary" @onclick="NewSpillHomeNow">Add Spill</button>
                     <button type="button" class="btn btn-primary" @onclick="resetHomeCounter">Reset Spill Count</button>
                     <button type="button" class="btn btn-primary" @onclick="SetHomeBigSpill">Mark as Big Spill</button>
                 </div>
@@ -87,6 +85,14 @@
         );
     }
 
+    public async Task ShowNewSpillModal(SpillType type)
+    {
+        var parameters = new ModalParameters();
+        parameters.Add("TypeOfSpill", type);
+        var spillModal = Modal.Show<InputPrompt>("New Spill", parameters);
+        var result = await spillModal.Result;
+    }
+
     public void VerifyAuthentication()
     {
         if (spillService.GetSpill().PassHash == hash(Password))
@@ -96,23 +102,23 @@
         }
     }
 
-    public void NewSpillHomeNow()
+    public async void NewSpillHomeNow()
     {
         if (!authed)
         {
             return;
         }
-        spillService.AddHomeSpill(DateTime.Now);
+        await ShowNewSpillModal(SpillType.Home);
         PageUpdate();
     }
 
-    public void NewSpillWorkNow()
+    public async void NewSpillWorkNow()
     {
         if (!authed)
         {
             return;
         }
-        spillService.AddEnterpriseSpill(DateTime.Now);
+        await ShowNewSpillModal(SpillType.Work);
         PageUpdate();
     }
 

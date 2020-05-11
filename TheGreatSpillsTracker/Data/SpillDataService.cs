@@ -18,16 +18,16 @@ namespace TheGreatSpillsTracker.Data
             }
             else
             {
-                spill.EnterpriseSpill = DateTime.Now;
-                spill.EnterpriseSpillCount = 0;
+                spill.WorkSpill = DateTime.Now;
+                spill.WorkSpillCount = 0;
                 spill.HomeSpill = DateTime.Now;
                 spill.HomeSpillCount = 0;
                 spill.BigSpill = DateTime.Now;
                 spill.BigSpillCount = 0;
                 spill.SpillCount = 0;
                 spill.PassHash = "";
-                spill.HomeItemLastSpilled = "";
-                spill.WorkItemLastSpilled = "";
+                spill.HomeSpillDescription = "";
+                spill.WorkSpillDescription = "";
                 spill.RecordSpillItem = "";
                 spill.HomeBigSpill = false;
                 spill.WorkBigSpill = false;
@@ -39,27 +39,30 @@ namespace TheGreatSpillsTracker.Data
         {
             return spill;
         }
-
+        
+        [Obsolete("AddNewSpill should be used instead")]
         public void AddHomeSpill(DateTime spillTime)
         {
-            spill.CheckSetNewRecord(spillTime);
-            spill.CheckSetNewMinRecord(spillTime);
-            spill.HomeSpill = spillTime;
-            spill.HomeSpillCount++;
-            spill.SpillCount++;
-            spill.HomeBigSpill = false;
+            spill.AddNewSpill(SpillType.Home, spillTime);
             SaveInfo();
         }
 
+        [Obsolete("AddNewSpill should be used instead")]
         public void AddEnterpriseSpill(DateTime spillTime)
         {
-            spill.CheckSetNewRecord(spillTime);
-            spill.CheckSetNewMinRecord(spillTime);
-            spill.EnterpriseSpill = spillTime;
-            spill.EnterpriseSpillCount++;
-            spill.SpillCount++;
-            spill.WorkBigSpill = false;
+            spill.AddNewSpill(SpillType.Work, spillTime);
             SaveInfo();
+        }
+
+        public void AddNewSpill(SpillType type, DateTime spillTime, string description)
+        {
+            spill.AddNewSpill(type, spillTime, description);
+            SaveInfo();
+        }
+
+        public void AddNewSpill(SpillType type, DateTime spillTime)
+        {
+            AddNewSpill(type, spillTime, "");
         }
 
         public void AddRecordSpill(string basisTime)
@@ -67,36 +70,28 @@ namespace TheGreatSpillsTracker.Data
             switch (basisTime)
             {
                 case "home":
-                    spill.BigSpill = spill.HomeSpill;
-                    spill.HomeBigSpill = true;
-                    spill.WorkBigSpill = false;
+                    spill.MarkAsBigSpill(SpillType.Home);
                     break;
                 case "work":
-                    spill.BigSpill = spill.EnterpriseSpill;
-                    spill.WorkBigSpill = true;
-                    spill.HomeBigSpill = false;
+                    spill.MarkAsBigSpill(SpillType.Work);
                     break;
                 default:
-                    spill.BigSpill = DateTime.Now;
-                    spill.WorkBigSpill = false;
-                    spill.HomeBigSpill = false;
+                    spill.MarkAsBigSpill(SpillType.None);
                     break;
             }
-
-            spill.BigSpillCount++;
 
             SaveInfo();
         }
 
         public void ResetHomeCount()
         {
-            spill.HomeSpillCount = 0;
+            spill.ResetSpillCount(SpillType.Home);
             SaveInfo();
         }
 
         public void ResetEnterpriseCount()
         {
-            spill.EnterpriseSpillCount = 0;
+            spill.ResetSpillCount(SpillType.Work);
             SaveInfo();
         }
 

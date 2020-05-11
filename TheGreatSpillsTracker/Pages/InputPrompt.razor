@@ -1,33 +1,64 @@
-﻿@inject IModalService Modal
+﻿@using TheGreatSpillsTracker.Data
+
+@inject IModalService Modal
 @inject IJSRuntime  JSRuntime
+@inject SpillDataService spillService
 
-
-<h3>Additional Information</h3>
 
 <div class="form-group">
-    <label for="formSpilldate">Date of Spill</label>
-    <input type="date" class="form-control" id="formSpillDate" @bind="date" />
+    <label for="formSpillDescription">Description of Spill</label>
+    <input type="text" class="form-control" id="formSpillDescription" placeholder="Garlic Sauce at Kyle's Desk" @bind="description"/>
 </div>
 
 <div class="form-group">
-    <label for="formSpillTime">Time of Spill</label>
-    <input type="time" class="form-control" id="formSpillTime" @bind="time" />
+    <input class="form-check-input" type="checkbox" value="" id="currentTimeCheckbox" @bind="useCurrentTime" />
+    <label class="form-check-label" for="currentTimeCheckbox">
+        Spill Just Happened
+    </label>
 </div>
+
+@if (!useCurrentTime)
+{
+    <div class="form-group">
+        <label for="formSpilldate">Date of Spill</label>
+        <input type="date" class="form-control" id="formSpillDate" @bind="date" />
+    </div>
+
+    <div class="form-group">
+        <label for="formSpillTime">Time of Spill</label>
+        <input type="time" class="form-control" id="formSpillTime" @bind="time" />
+    </div>
+}
 
 <button @onclick="SubmitChoice" class="btn btn-primary">Submit</button>
 
 @code {
 
     [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; }
+    [Parameter] public TheGreatSpillsTracker.Data.SpillType TypeOfSpill { get; set; }
 
     DateTime date;
     DateTime time;
+    Boolean useCurrentTime = true;
+    String description = "";
 
     async void SubmitChoice()
     {
         int offset = await JSRuntime.InvokeAsync<int>("getTimeOffset");
-        DateTime dt = new DateTime(date.Year, date.Month, date.Day, time.Hour, time.Minute, time.Second, DateTimeKind.Utc);
-        dt = dt.AddMinutes(-offset);
-        BlazoredModal.Close(ModalResult.Ok<DateTime>(dt));
+        DateTime dt;
+
+        if (useCurrentTime)
+        {
+            dt = DateTime.UtcNow;
+        }
+        else
+        {
+            dt = new DateTime(date.Year, date.Month, date.Day, time.Hour, time.Minute, time.Second, DateTimeKind.Utc);
+            dt = dt.AddMinutes(offset);
+        }
+
+        spillService.AddNewSpill(TypeOfSpill, dt, description);
+
+        BlazoredModal.Close();
     }
 }

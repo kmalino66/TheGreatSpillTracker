@@ -52,7 +52,10 @@
         }
 
         function ReloadPage() {
-            window.location.reload();
+            if (!window.location.href.endsWith("/admin")) {
+                window.location.reload();
+            }
+            
         }
 
         function getTimeOffset() {

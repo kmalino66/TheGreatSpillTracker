@@ -10,7 +10,7 @@ namespace TheGreatSpillsTracker.Data
     {
         private const string STRING_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
-        public DateTime EnterpriseSpill { get; set; }
+        public DateTime WorkSpill { get; set; }
         public DateTime HomeSpill { get; set; }
 
         public DateTime BigSpill { get; set; }
@@ -18,24 +18,24 @@ namespace TheGreatSpillsTracker.Data
         public TimeSpan MinTimeNoSpill { get; set; }
 
         public int SpillCount { get; set; }
-        public int EnterpriseSpillCount { get; set; }
+        public int WorkSpillCount { get; set; }
         public int HomeSpillCount { get; set; }
         public int BigSpillCount { get; set; }
         public string PassHash { get; set; }
-        public string HomeItemLastSpilled { get; set; }
-        public string WorkItemLastSpilled { get; set; }
+        public string HomeSpillDescription { get; set; }
+        public string WorkSpillDescription { get; set; }
         public string RecordSpillItem { get; set; }
         public bool HomeBigSpill { get; set; }
         public bool WorkBigSpill { get; set; }
 
-        public string EnterpriseSpillString()
+        public string WorkSpillString()
         {
-            return EnterpriseSpill.ToUniversalTime().ToString(STRING_FORMAT);
+            return WorkSpill.ToUniversalTime().ToString(STRING_FORMAT);
         }
 
-        public string EnterpriseSpillStringNonUTC()
+        public string WorkSpillStringNonUTC()
         {
-            return EnterpriseSpill.ToString(STRING_FORMAT);
+            return WorkSpill.ToString(STRING_FORMAT);
         }
 
         public string HomeSpillString()
@@ -61,9 +61,9 @@ namespace TheGreatSpillsTracker.Data
         public TimeSpan TimeSinceLastSpill(DateTime spillTime)
         {
             DateTime lastSpill;
-            if (EnterpriseSpill >= HomeSpill)
+            if (WorkSpill >= HomeSpill)
             {
-                lastSpill = EnterpriseSpill;
+                lastSpill = WorkSpill;
             }
             else
             {
@@ -93,5 +93,83 @@ namespace TheGreatSpillsTracker.Data
             }
         }
 
+        public void AddNewSpill(SpillType type, DateTime spillTime)
+        {
+            AddNewSpill(type, spillTime, "");
+        }
+
+        public void AddNewSpill(SpillType type, DateTime spillTime, String spillDescription)
+        {
+
+            CheckSetNewRecord(spillTime);
+            CheckSetNewMinRecord(spillTime);
+            SpillCount++;
+
+            switch (type)
+            {
+                case SpillType.Home:
+                    HomeSpill = spillTime;
+                    HomeSpillCount++;
+                    HomeBigSpill = false;
+                    HomeSpillDescription = spillDescription;
+                    break;
+                case SpillType.Work:
+                    WorkSpill = spillTime;
+                    WorkSpillCount++;
+                    WorkBigSpill = false;
+                    WorkSpillDescription = spillDescription;
+                    break;
+                default:
+                    throw new ArgumentException("Bad spill type");
+            }
+        }
+
+        public void MarkAsBigSpill(SpillType type)
+        {
+            BigSpillCount++;
+
+            switch (type)
+            {
+                case SpillType.Home:
+                    BigSpill = HomeSpill;
+                    HomeBigSpill = true;
+                    WorkBigSpill = false;
+                    break;
+                case SpillType.Work:
+                    BigSpill = WorkSpill;
+                    HomeBigSpill = false;
+                    WorkBigSpill = true;
+                    break;
+                default:
+                    BigSpill = DateTime.Now;
+                    HomeBigSpill = false;
+                    WorkBigSpill = false;
+                    break;
+
+            }
+        }
+
+        public void ResetSpillCount(SpillType type)
+        {
+            switch (type)
+            {
+                case SpillType.Home:
+                    HomeSpillCount = 0;
+                    break;
+                case SpillType.Work:
+                    WorkSpillCount = 0;
+                    break;
+                default:
+                    throw new ArgumentException("Bad spill type");
+            }
+        }
+
+    }
+
+    public enum SpillType
+    {
+        Home,
+        Work,
+        None
     }
 }
