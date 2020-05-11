@@ -24,6 +24,7 @@ namespace TheGreatSpillsTracker.Data
         public string PassHash { get; set; }
         public string HomeSpillDescription { get; set; }
         public string WorkSpillDescription { get; set; }
+        public string BigSpillDescription { get; set; }
         public string RecordSpillItem { get; set; }
         public bool HomeBigSpill { get; set; }
         public bool WorkBigSpill { get; set; }
@@ -132,16 +133,19 @@ namespace TheGreatSpillsTracker.Data
             {
                 case SpillType.Home:
                     BigSpill = HomeSpill;
+                    BigSpillDescription = HomeSpillDescription;
                     HomeBigSpill = true;
                     WorkBigSpill = false;
                     break;
                 case SpillType.Work:
                     BigSpill = WorkSpill;
+                    BigSpillDescription = WorkSpillDescription;
                     HomeBigSpill = false;
                     WorkBigSpill = true;
                     break;
                 default:
                     BigSpill = DateTime.Now;
+                    BigSpillDescription = "";
                     HomeBigSpill = false;
                     WorkBigSpill = false;
                     break;

@@ -64,6 +64,10 @@
                 <div class="card-body">
                     <div class="RecordTime" data-date="@spillService.GetSpill().BigSpillString()"></div>
                     <h3 class="badge badge-primary">Spill Count: @spillService.GetSpill().BigSpillCount</h3>
+                    @if (!string.IsNullOrWhiteSpace(spillService.GetSpill().BigSpillDescription))
+                    {
+                        <h3 class="badge badge-primary">Spill Description: @spillService.GetSpill().BigSpillDescription</h3>
+                    }
                 </div>
             </div>
         </div>
