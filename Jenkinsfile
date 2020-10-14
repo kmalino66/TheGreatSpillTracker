@@ -1,6 +1,7 @@
 pipeline {
 	environment {
 		registry = "registry.kmalinowski.net/TheGreatSpillTracker"
+	}
 	agent any
 	stages {
 		stage('Clone Repo') {
