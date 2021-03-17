@@ -64,6 +64,11 @@ namespace TheGreatSpillsTracker.Data
                     WorkSpill = spill;
                     WorkSpillCount += 1;
                 }
+
+                if (spill.BigSpill)
+                {
+                    BigSpill = spill;
+                }
             }
         }
 
@@ -182,9 +187,11 @@ namespace TheGreatSpillsTracker.Data
             switch (type)
             {
                 case SpillType.Home:
+                    HomeSpill.BigSpill = true;
                     BigSpill = HomeSpill;
                     break;
                 case SpillType.Work:
+                    WorkSpill.BigSpill = true;
                     BigSpill = WorkSpill;
                     break;
                 default:

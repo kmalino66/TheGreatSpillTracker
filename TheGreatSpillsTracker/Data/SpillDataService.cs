@@ -9,7 +9,7 @@ namespace TheGreatSpillsTracker.Data
     {
         private SpillData spill = new SpillData();
 
-        public void Initialize()
+        public SpillDataService()
         {
             SpillData tmp = ReadInfo();
 
