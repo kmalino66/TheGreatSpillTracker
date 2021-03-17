@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace TheGreatSpillsTracker.Data
@@ -18,19 +19,13 @@ namespace TheGreatSpillsTracker.Data
             }
             else
             {
-                spill.WorkSpill = DateTime.Now;
-                spill.WorkSpillCount = 0;
-                spill.HomeSpill = DateTime.Now;
-                spill.HomeSpillCount = 0;
-                spill.BigSpill = DateTime.Now;
-                spill.BigSpillCount = 0;
-                spill.SpillCount = 0;
+                spill.spills = new List<Spill>();
                 spill.PassHash = "";
-                spill.HomeSpillDescription = "";
-                spill.WorkSpillDescription = "";
-                spill.RecordSpillItem = "";
-                spill.HomeBigSpill = false;
-                spill.WorkBigSpill = false;
+                spill.WorkSpill = new Spill();
+                spill.HomeSpill = new Spill();
+                spill.BigSpill = new Spill();
+                spill.MaxTimeNoSpill = TimeSpan.MinValue;
+                spill.MinTimeNoSpill = TimeSpan.MaxValue;
                 SaveInfo();
             }
         }
@@ -40,20 +35,6 @@ namespace TheGreatSpillsTracker.Data
             return spill;
         }
         
-        [Obsolete("AddNewSpill should be used instead")]
-        public void AddHomeSpill(DateTime spillTime)
-        {
-            spill.AddNewSpill(SpillType.Home, spillTime);
-            SaveInfo();
-        }
-
-        [Obsolete("AddNewSpill should be used instead")]
-        public void AddEnterpriseSpill(DateTime spillTime)
-        {
-            spill.AddNewSpill(SpillType.Work, spillTime);
-            SaveInfo();
-        }
-
         public void AddNewSpill(SpillType type, DateTime spillTime, string description)
         {
             spill.AddNewSpill(type, spillTime, description);

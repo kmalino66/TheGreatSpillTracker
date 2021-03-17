@@ -1,19 +1,24 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Runtime.Serialization;
 
 namespace TheGreatSpillsTracker.Data
 {
-    [Serializable]
+    [JsonObject(MemberSerialization.OptIn)]
     public class SpillData
     {
         private const string STRING_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
-        public DateTime WorkSpill { get; set; }
-        public DateTime HomeSpill { get; set; }
+        [JsonProperty]
+        public List<Spill> spills { get; set; }
 
-        public DateTime BigSpill { get; set; }
+        [JsonProperty]
+        public string PassHash { get; set; }
+
+        public Spill WorkSpill { get; set; }
+        public Spill HomeSpill { get; set; }
+        public Spill BigSpill { get; set; }
         public TimeSpan MaxTimeNoSpill { get; set; }
         public TimeSpan MinTimeNoSpill { get; set; }
 
@@ -21,48 +26,94 @@ namespace TheGreatSpillsTracker.Data
         public int WorkSpillCount { get; set; }
         public int HomeSpillCount { get; set; }
         public int BigSpillCount { get; set; }
-        public string PassHash { get; set; }
-        public string HomeSpillDescription { get; set; }
-        public string WorkSpillDescription { get; set; }
-        public string BigSpillDescription { get; set; }
-        public string RecordSpillItem { get; set; }
-        public bool HomeBigSpill { get; set; }
-        public bool WorkBigSpill { get; set; }
+
+        [OnDeserialized]
+        public void OnDeserialized(StreamingContext context)
+        {
+            spills.Sort();
+            WorkSpill = new Spill();
+            HomeSpill = new Spill();
+            BigSpill = new Spill();
+            MaxTimeNoSpill = TimeSpan.MinValue;
+            MinTimeNoSpill = TimeSpan.MaxValue;
+
+            foreach (Spill spill in spills)
+            {
+                TimeSpan span = TimeSinceLastSpill(spill.Time);
+
+                if(span.Ticks > 0)
+                {
+                    if(span > MaxTimeNoSpill)
+                    {
+                        MaxTimeNoSpill = span;
+                    }
+
+                    if(span < MinTimeNoSpill)
+                    {
+                        MinTimeNoSpill = span;
+                    }
+                }
+
+                if (spill.Type == SpillType.Home)
+                {
+                    HomeSpill = spill;
+                    HomeSpillCount += 1;
+                }
+                else if (spill.Type == SpillType.Work)
+                {
+                    WorkSpill = spill;
+                    WorkSpillCount += 1;
+                }
+            }
+        }
 
         public string WorkSpillString()
         {
-            return WorkSpill.ToUniversalTime().ToString(STRING_FORMAT);
+            return WorkSpill.Time.ToUniversalTime().ToString(STRING_FORMAT);
         }
 
         public string WorkSpillStringNonUTC()
         {
-            return WorkSpill.ToString(STRING_FORMAT);
+            return WorkSpill.Time.ToString(STRING_FORMAT);
         }
 
         public string HomeSpillString()
         {
-            return HomeSpill.ToUniversalTime().ToString(STRING_FORMAT);
+            return HomeSpill.Time.ToUniversalTime().ToString(STRING_FORMAT);
         }
 
         public string HomeSpillStringNonUTC()
         {
-            return HomeSpill.ToString(STRING_FORMAT);
+            return HomeSpill.Time.ToString(STRING_FORMAT);
         }
 
         public string BigSpillString()
         {
-            return BigSpill.ToUniversalTime().ToString(STRING_FORMAT);
+            return BigSpill.Time.ToUniversalTime().ToString(STRING_FORMAT);
         }
 
         public string BigSpillStringNonUTC()
         {
-            return BigSpill.ToString(STRING_FORMAT);
+            return BigSpill.Time.ToString(STRING_FORMAT);
         }
 
         public TimeSpan TimeSinceLastSpill(DateTime spillTime)
         {
-            DateTime lastSpill;
-            if (WorkSpill >= HomeSpill)
+            Spill lastSpill;
+
+            if (WorkSpill.Time.CompareTo(DateTime.MinValue) == 0 && HomeSpill.Time.CompareTo(DateTime.MinValue) == 0)
+            {
+                return new TimeSpan();
+            }
+            else if (WorkSpill.Time.CompareTo(DateTime.MinValue) == 0)
+            {
+                lastSpill = HomeSpill;
+            }
+            else if (HomeSpill.Time.CompareTo(DateTime.MinValue) == 0)
+            {
+                lastSpill = WorkSpill;
+            }
+            else if (WorkSpill.Time >= HomeSpill.Time)
             {
                 lastSpill = WorkSpill;
             }
@@ -71,7 +122,7 @@ namespace TheGreatSpillsTracker.Data
                 lastSpill = HomeSpill;
             }
 
-            return spillTime - lastSpill;
+            return spillTime - lastSpill.Time;
         }
 
         public void CheckSetNewRecord(DateTime spillTime)
@@ -99,26 +150,25 @@ namespace TheGreatSpillsTracker.Data
             AddNewSpill(type, spillTime, "");
         }
 
-        public void AddNewSpill(SpillType type, DateTime spillTime, String spillDescription)
+        public void AddNewSpill(SpillType type, DateTime spillTime, string spillDescription)
         {
 
             CheckSetNewRecord(spillTime);
             CheckSetNewMinRecord(spillTime);
             SpillCount++;
 
+            Spill spill = new Spill(spillTime, spillDescription, false, type);
+            spills.Add(spill);
+
             switch (type)
             {
                 case SpillType.Home:
-                    HomeSpill = spillTime;
+                    HomeSpill = spill;
                     HomeSpillCount++;
-                    HomeBigSpill = false;
-                    HomeSpillDescription = spillDescription;
                     break;
                 case SpillType.Work:
-                    WorkSpill = spillTime;
+                    WorkSpill = spill;
                     WorkSpillCount++;
-                    WorkBigSpill = false;
-                    WorkSpillDescription = spillDescription;
                     break;
                 default:
                     throw new ArgumentException("Bad spill type");
@@ -133,21 +183,12 @@ namespace TheGreatSpillsTracker.Data
             {
                 case SpillType.Home:
                     BigSpill = HomeSpill;
-                    BigSpillDescription = HomeSpillDescription;
-                    HomeBigSpill = true;
-                    WorkBigSpill = false;
                     break;
                 case SpillType.Work:
                     BigSpill = WorkSpill;
-                    BigSpillDescription = WorkSpillDescription;
-                    HomeBigSpill = false;
-                    WorkBigSpill = true;
                     break;
                 default:
-                    BigSpill = DateTime.Now;
-                    BigSpillDescription = "";
-                    HomeBigSpill = false;
-                    WorkBigSpill = false;
+                    BigSpill = new Spill();
                     break;
 
             }

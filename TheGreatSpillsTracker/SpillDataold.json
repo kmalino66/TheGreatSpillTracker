@@ -1,0 +1,18 @@
+{
+  "WorkSpill": "2020-04-18T10:44:21.1299859+00:00",
+  "HomeSpill": "2020-07-18T16:00:00Z",
+  "BigSpill": "2018-08-28T05:00:00.1308069+00:00",
+  "MaxTimeNoSpill": "77.16:15:38.8700141",
+  "MinTimeNoSpill": "0.0:1:0.0",
+  "SpillCount": 9,
+  "WorkSpillCount": 0,
+  "HomeSpillCount": 9,
+  "BigSpillCount": 1,
+  "PassHash": "A3F6E82F564602E0CAC8D1860B064A2E7D127A65",
+  "HomeSpillDescription": "",
+  "WorkSpillDescription": "",
+  "BigSpillDescription": "Big freaking MFD printer",
+  "RecordSpillItem": "",
+  "HomeBigSpill": false,
+  "WorkBigSpill": false
+}

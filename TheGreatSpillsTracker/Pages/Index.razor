@@ -32,9 +32,9 @@
                 <div class="card-body">
                     <div class="EnterpriseTime" data-date="@spillService.GetSpill().WorkSpillString()"></div>
                     <h3 class="badge badge-primary">Spill Count: @spillService.GetSpill().WorkSpillCount</h3>
-                    @if (!string.IsNullOrWhiteSpace(spillService.GetSpill().WorkSpillDescription))
+                    @if (!string.IsNullOrWhiteSpace(spillService.GetSpill().WorkSpill.Description))
                     {
-                        <h3 class="badge badge-primary">Spill Description: @spillService.GetSpill().WorkSpillDescription</h3>
+                        <h3 class="badge badge-primary">Spill Description: @spillService.GetSpill().WorkSpill.Description</h3>
                     }
                 </div>
             </div>
@@ -47,9 +47,9 @@
                 <div class="card-body">
                     <div class="HomeTime" data-date="@spillService.GetSpill().HomeSpillString()"></div>
                     <h3 class="badge badge-primary">Spill Count: @spillService.GetSpill().HomeSpillCount</h3>
-                    @if (!string.IsNullOrWhiteSpace(spillService.GetSpill().HomeSpillDescription))
+                    @if (!string.IsNullOrWhiteSpace(spillService.GetSpill().HomeSpill.Description))
                     {
-                        <h3 class="badge badge-primary">Spill Description: @spillService.GetSpill().HomeSpillDescription</h3>
+                        <h3 class="badge badge-primary">Spill Description: @spillService.GetSpill().HomeSpill.Description</h3>
                     }
                 </div>
             </div>
@@ -64,9 +64,9 @@
                 <div class="card-body">
                     <div class="RecordTime" data-date="@spillService.GetSpill().BigSpillString()"></div>
                     <h3 class="badge badge-primary">Spill Count: @spillService.GetSpill().BigSpillCount</h3>
-                    @if (!string.IsNullOrWhiteSpace(spillService.GetSpill().BigSpillDescription))
+                    @if (!string.IsNullOrWhiteSpace(spillService.GetSpill().BigSpill.Description))
                     {
-                        <h3 class="badge badge-primary">Spill Description: @spillService.GetSpill().BigSpillDescription</h3>
+                        <h3 class="badge badge-primary">Spill Description: @spillService.GetSpill().BigSpill.Description</h3>
                     }
                 </div>
             </div>
