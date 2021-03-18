@@ -78,7 +78,8 @@ namespace TheGreatSpillsTracker.Data
 
         public void SaveInfo()
         {
-            string path = Path.Combine(Environment.CurrentDirectory, "SpillData.json");
+            string path = Path.Combine(Environment.CurrentDirectory, Path.Combine("Config", "SpillData.json"));
+
             string json = JsonConvert.SerializeObject(spill, Formatting.Indented);
             using (StreamWriter outputFile = new StreamWriter(path))
             {
@@ -88,7 +89,7 @@ namespace TheGreatSpillsTracker.Data
 
         public SpillData ReadInfo()
         {
-            string path = Path.Combine(Environment.CurrentDirectory, "SpillData.json");
+            string path = Path.Combine(Environment.CurrentDirectory, Path.Combine("Config", "SpillData.json"));
 
             if (!System.IO.File.Exists(path))
             {
@@ -101,7 +102,7 @@ namespace TheGreatSpillsTracker.Data
 
         public string ReadInfoRaw()
         {
-            string path = Path.Combine(Environment.CurrentDirectory, "SpillData.json");
+            string path = Path.Combine(Environment.CurrentDirectory, Path.Combine("Config", "SpillData.json"));
 
             if (!System.IO.File.Exists(path))
             {

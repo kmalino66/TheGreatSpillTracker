@@ -4,13 +4,14 @@
 @inject IJSRuntime jrt
 @inject NavigationManager NavigationManager
 @inject SpillDataService spillService
+@inject SpillConfiguration spillConfig
 
 <div class="jumbotron">
     <div class="container">
         <div class="row">
             <div class="col-md-8">
-                <h1 class="display-4">The Great Spills Tracker</h1>
-                <p class="lead">A simple app to keep track of time since Trent last spilled.</p>
+                <h1 class="display-4">@spillConfig.General_Heading</h1>
+                <p class="lead">@spillConfig.General_SubHeading</p>
             </div>
             <div class="col-md-4">
                 <img src="images/squat.jpg" />

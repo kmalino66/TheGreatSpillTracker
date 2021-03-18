@@ -30,6 +30,7 @@ namespace TheGreatSpillsTracker
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<SpillDataService>();
+            services.AddSingleton<SpillConfiguration>();
             services.AddSignalR();
             services.AddBlazoredModal();
         }
