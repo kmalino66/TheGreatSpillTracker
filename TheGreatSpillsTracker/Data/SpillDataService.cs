@@ -16,6 +16,7 @@ namespace TheGreatSpillsTracker.Data
             if (tmp != null)
             {
                 spill = tmp;
+                SaveInfo();
             }
             else
             {

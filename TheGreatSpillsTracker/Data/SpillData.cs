@@ -54,6 +54,8 @@ namespace TheGreatSpillsTracker.Data
                     }
                 }
 
+                SpillCount++;
+
                 if (spill.Type == SpillType.Home)
                 {
                     HomeSpill = spill;
@@ -68,6 +70,7 @@ namespace TheGreatSpillsTracker.Data
                 if (spill.BigSpill)
                 {
                     BigSpill = spill;
+                    BigSpillCount++;
                 }
             }
         }
